@@ -28,7 +28,8 @@ antoinefalisse'''
 
 import os
 import sys
-sys.path.append(os.path.abspath('./..'))
+BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+sys.path.append(BASE_DIR)
 
 from utilsAuth import getToken
 
