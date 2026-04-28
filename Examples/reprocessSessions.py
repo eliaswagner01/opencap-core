@@ -42,7 +42,7 @@ https://app.opencap.ai/session/23d52d41-69fe-47cf-8b60-838e4268dd50
 
 import os
 import sys
-sys.path.append(os.path.abspath('./..'))
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from utilsServer import batchReprocess
 from utilsAPI import getAPIURL
