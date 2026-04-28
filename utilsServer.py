@@ -36,6 +36,16 @@ from utilsAPI import getAPIURL
 API_URL = getAPIURL()
 API_TOKEN = getToken()
 
+def patch_to_server_if_allowed(url, data, hasWritePermissions):
+    if hasWritePermissions:
+        return makeRequestWithRetry('PATCH',
+                                     url,
+                                     data=data,
+                                     headers={"Authorization": "Token {}".format(API_TOKEN)})
+    else:
+        logging.info('Skipping server update because you do not have permission to write to the server.')
+        return None
+
 def processTrial(session_id, trial_id, trial_type = 'dynamic',
                  imageUpsampleFactor = 4, poseDetector = 'OpenPose',
                  isDocker = True, resolutionPoseDetection = 'default',
@@ -71,10 +81,9 @@ def processTrial(session_id, trial_id, trial_type = 'dynamic',
             error_msg = {}
             error_msg['error_msg'] = e.args[0]
             error_msg['error_msg_dev'] = e.args[1]
-            _ = makeRequestWithRetry('PATCH',
-                                     trial_url,
-                                     data={"meta": json.dumps(error_msg)},
-                                     headers = {"Authorization": "Token {}".format(API_TOKEN)}) 
+            patch_to_server_if_allowed(trial_url,
+                                       {"meta": json.dumps(error_msg)},
+                                       hasWritePermissions)
             raise Exception('Calibration failed', e.args[0], e.args[1])
         
         if not hasWritePermissions:
@@ -136,8 +145,7 @@ def processTrial(session_id, trial_id, trial_type = 'dynamic',
             # error at kinematics most likely, but if pose estimation completed,
             # pickles will get posted
             try:
-                # Write results to django
-                if not batchProcess:
+                if not batchProcess and hasWritePermissions:
                     print('trial failed. posting pose pickles')
                     postMotionData(trial_id,session_path,trial_name=trial_name,isNeutral=True,
                                     poseDetector=poseDetector, 
@@ -149,10 +157,9 @@ def processTrial(session_id, trial_id, trial_type = 'dynamic',
             error_msg = {}
             error_msg['error_msg'] = e.args[0]
             error_msg['error_msg_dev'] = e.args[1]
-            _ = makeRequestWithRetry('PATCH',
-                                     trial_url,
-                                     data={"meta": json.dumps(error_msg)},
-                                     headers = {"Authorization": "Token {}".format(API_TOKEN)})
+            patch_to_server_if_allowed(trial_url,
+                                       {"meta": json.dumps(error_msg)},
+                                       hasWritePermissions)
             raise Exception('Static trial failed', e.args[0], e.args[1])
         
         if not hasWritePermissions:
@@ -228,8 +235,7 @@ def processTrial(session_id, trial_id, trial_type = 'dynamic',
             # error at kinematics most likely, but if pose estimation completed,
             # pickles will get posted
             try:
-                # Write results to django
-                if not batchProcess:
+                if not batchProcess and hasWritePermissions:
                     print('trial failed. posting pose pickles')
                     postMotionData(trial_id,session_path,trial_name=trial_name,isNeutral=False,
                                     poseDetector=poseDetector, 
@@ -241,10 +247,9 @@ def processTrial(session_id, trial_id, trial_type = 'dynamic',
             error_msg = {}
             error_msg['error_msg'] = e.args[0]
             error_msg['error_msg_dev'] = e.args[1]
-            _ = makeRequestWithRetry('PATCH',
-                                     trial_url,
-                                     data={"meta": json.dumps(error_msg)},
-                                     headers = {"Authorization": "Token {}".format(API_TOKEN)})
+            patch_to_server_if_allowed(trial_url,
+                                       {"meta": json.dumps(error_msg)},
+                                       hasWritePermissions)
             raise Exception('Dynamic trial failed.\n' + error_msg['error_msg_dev'], e.args[0], e.args[1])
         
         if not hasWritePermissions:
@@ -385,17 +390,23 @@ def batchReprocess(session_ids,calib_id,static_id,dynamic_trialNames,poseDetecto
                               hasWritePermissions = hasWritePermissions,
                               cameras_to_use=cameras_to_use)
                 statusData = {'status':'done'}
-                _ = makeRequestWithRetry('PATCH',
-                                         API_URL + "trials/{}/".format(calib_id_toProcess),
-                                         data=statusData,
-                                         headers = {"Authorization": "Token {}".format(API_TOKEN)})
+                if hasWritePermissions:
+                    _ = makeRequestWithRetry('PATCH',
+                                             API_URL + "trials/{}/".format(calib_id_toProcess),
+                                             data=statusData,
+                                             headers = {"Authorization": "Token {}".format(API_TOKEN)})
+                else:
+                    logging.info('Skipping server trial status update for calibration because no write permission.')
             except Exception as e:
                 print(e)
                 statusData = {'status':'error'}
-                _ = makeRequestWithRetry('PATCH',
-                                         API_URL + "trials/{}/".format(calib_id_toProcess),
-                                         data=statusData,
-                                         headers = {"Authorization": "Token {}".format(API_TOKEN)})
+                if hasWritePermissions:
+                    _ = makeRequestWithRetry('PATCH',
+                                             API_URL + "trials/{}/".format(calib_id_toProcess),
+                                             data=statusData,
+                                             headers = {"Authorization": "Token {}".format(API_TOKEN)})
+                else:
+                    logging.info('Skipping server trial status update for calibration error because no write permission.')
         
         if static_id == None:
             static_id_toProcess = getNeutralTrialID(session_id)
@@ -416,17 +427,23 @@ def batchReprocess(session_ids,calib_id,static_id,dynamic_trialNames,poseDetecto
                               batchProcess = True,
                               cameras_to_use=cameras_to_use)
                 statusData = {'status':'done'}
-                _ = makeRequestWithRetry('PATCH',
-                                         API_URL + "trials/{}/".format(static_id_toProcess),
-                                         data=statusData,
-                                         headers = {"Authorization": "Token {}".format(API_TOKEN)})
+                if hasWritePermissions:
+                    _ = makeRequestWithRetry('PATCH',
+                                             API_URL + "trials/{}/".format(static_id_toProcess),
+                                             data=statusData,
+                                             headers = {"Authorization": "Token {}".format(API_TOKEN)})
+                else:
+                    logging.info('Skipping server trial status update for static because no write permission.')
             except Exception as e:
                 print(e)
                 statusData = {'status':'error'}
-                _ = makeRequestWithRetry('PATCH',
-                                         API_URL + "trials/{}/".format(static_id_toProcess),
-                                         data=statusData,
-                                         headers = {"Authorization": "Token {}".format(API_TOKEN)})
+                if hasWritePermissions:
+                    _ = makeRequestWithRetry('PATCH',
+                                             API_URL + "trials/{}/".format(static_id_toProcess),
+                                             data=statusData,
+                                             headers = {"Authorization": "Token {}".format(API_TOKEN)})
+                else:
+                    logging.info('Skipping server trial status update for static error because no write permission.')
         if dynamic_ids == None:
             response = makeRequestWithRetry('GET',
                                             API_URL + "sessions/{}/".format(session_id),
@@ -454,17 +471,23 @@ def batchReprocess(session_ids,calib_id,static_id,dynamic_trialNames,poseDetecto
                           cameras_to_use=cameras_to_use)
                 
                 statusData = {'status':'done'}
-                _ = makeRequestWithRetry('PATCH',
-                                         API_URL + "trials/{}/".format(dID),
-                                         data=statusData,
-                                         headers = {"Authorization": "Token {}".format(API_TOKEN)})
+                if hasWritePermissions:
+                    _ = makeRequestWithRetry('PATCH',
+                                             API_URL + "trials/{}/".format(dID),
+                                             data=statusData,
+                                             headers = {"Authorization": "Token {}".format(API_TOKEN)})
+                else:
+                    logging.info('Skipping server trial status update for dynamic because no write permission.')
             except Exception as e:
                 print(e)
                 statusData = {'status':'error'}
-                _ = makeRequestWithRetry('PATCH',
-                                         API_URL + "trials/{}/".format(dID),
-                                         data=statusData,
-                                         headers = {"Authorization": "Token {}".format(API_TOKEN)})
+                if hasWritePermissions:
+                    _ = makeRequestWithRetry('PATCH',
+                                             API_URL + "trials/{}/".format(dID),
+                                             data=statusData,
+                                             headers = {"Authorization": "Token {}".format(API_TOKEN)})
+                else:
+                    logging.info('Skipping server trial status update for dynamic error because no write permission.')
 
 def runTestSession(pose='all',isDocker=True,maxNumTries=3):
     # We retry test sessions because different sometimes when different
