@@ -77,6 +77,8 @@ def runOpenPoseVideo(cameraDirectory,fileName,pathOpenPose, trialName,
     
     openposePklDir = os.path.join(outputPklFolder, trialName)
     pathOutputPkl = os.path.join(cameraDirectory, openposePklDir)
+    pathOutputVideoWithKeypoints = os.path.join(
+        pathOutputVideo, trialPrefix + '_rotatedwithKeypoints.avi')
     
     os.makedirs(pathOutputVideo, exist_ok=True)
     os.makedirs(pathOutputJsons, exist_ok=True)
@@ -106,9 +108,10 @@ def runOpenPoseVideo(cameraDirectory,fileName,pathOpenPose, trialName,
     if not os.path.exists(pathVideoRot):
         os.system(CMD)
 
-    # Run OpenPose if this file doesn't exist in outputs
+    # Run OpenPose if pose data or the rendered overlay video is missing.
     ppPklPath = os.path.join(pathOutputPkl, trialPrefix + '_pp.pkl')    
-    if not os.path.exists(ppPklPath):
+    if (not os.path.exists(ppPklPath) or
+            (generateVideo and not os.path.exists(pathOutputVideoWithKeypoints))):
         c_path = os.getcwd()
         command = runOpenPoseCMD(
             pathOpenPose, resolutionPoseDetection, cameraDirectory,
@@ -217,23 +220,37 @@ def runOpenPoseCMD(pathOpenPose, resolutionPoseDetection, cameraDirectory,
                 raise Exception(exception, exception)   
             
     elif pathOpenPose == "docker":
-        
-        command = "docker run --gpus=1 -v {}:/openpose/data stanfordnmbl/openpose-gpu\
-            /openpose/build/examples/openpose/openpose.bin\
-            --video /openpose/data/{}\
-            --display 0\
-            --write_json /openpose/data/{}\
-            --render_pose 0{}".format(cameraDirectory, fileName,
-                                        openposeJsonDir, cmd_hr)
+        if generateVideo:
+            outputVideoDir = os.path.relpath(pathOutputVideo, cameraDirectory)
+            pathVideoOut = os.path.join(
+                outputVideoDir, trialPrefix + 'withKeypoints.avi')
+            pathVideoOut = pathVideoOut.replace(os.sep, '/')
+            command = "docker run --gpus=1 -v {}:/openpose/data stanfordnmbl/openpose-gpu\
+                /openpose/build/examples/openpose/openpose.bin\
+                --video /openpose/data/{}\
+                --display 0\
+                --write_json /openpose/data/{}\
+                --render_pose 1\
+                --write_video /openpose/data/{}{}".format(
+                    cameraDirectory, fileName, openposeJsonDir, pathVideoOut,
+                    cmd_hr)
+        else:
+            command = "docker run --gpus=1 -v {}:/openpose/data stanfordnmbl/openpose-gpu\
+                /openpose/build/examples/openpose/openpose.bin\
+                --video /openpose/data/{}\
+                --display 0\
+                --write_json /openpose/data/{}\
+                --render_pose 0{}".format(cameraDirectory, fileName,
+                                            openposeJsonDir, cmd_hr)
     else:
         os.chdir(pathOpenPose)
         pathVideoOut = os.path.join(pathOutputVideo,
                                     trialPrefix + 'withKeypoints.avi')
         if not generateVideo:
-            command = ('bin\OpenPoseDemo.exe --video {} --write_json {} --render_threshold 0.5 --display 0 --render_pose 0{}'.format(
+            command = ('bin\\OpenPoseDemo.exe --video {} --write_json {} --render_threshold 0.5 --display 0 --render_pose 0{}'.format(
                 videoFullPath, pathOutputJsons, cmd_hr))
         else:
-            command = ('bin\OpenPoseDemo.exe --video {} --write_json {} --render_threshold 0.5 --display 0{}--write_video {}'.format(
+            command = ('bin\\OpenPoseDemo.exe --video {} --write_json {} --render_threshold 0.5 --display 0{}--write_video {}'.format(
                 videoFullPath, pathOutputJsons, cmd_hr, pathVideoOut))
 
     if command:

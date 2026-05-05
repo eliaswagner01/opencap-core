@@ -104,10 +104,16 @@ resolutionPoseDetection = '1x736'
 # reprocessing a session that you collected, data will get written to the database
 # regardless of your selection. If True, the local copy will be deleted.
 deleteLocalFolder = False
+
+# Set use_existing_pose_pickle to False to force pose detection to run locally.
+# This is required when you want OpenPose/mmpose to render videos with the
+# detected pose overlaid on the original videos.
+use_existing_pose_pickle = True
       
 
 # %% Process data.
 batchReprocess(session_ids,calib_id,static_id,dynamic_trialNames,
                poseDetector=poseDetector,
                resolutionPoseDetection=resolutionPoseDetection,
-               deleteLocalFolder=deleteLocalFolder)
+               deleteLocalFolder=deleteLocalFolder,
+               use_existing_pose_pickle=use_existing_pose_pickle)
