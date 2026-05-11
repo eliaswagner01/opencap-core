@@ -26,3 +26,11 @@ newsletter.py
 
 .DS_Store
 .vscode/
+
+# OpenSim generated/scaled models (keep only base models)
+*_scaled.osim
+*_scaled_snapped.osim
+*_scaled_no_patella.osim
+*_no_patella.osim
+*_OpenPose.osim
+*_generic.osim
