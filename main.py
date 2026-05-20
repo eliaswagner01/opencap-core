@@ -527,7 +527,9 @@ def main(sessionName, trialName, trial_id, cameras_to_use=['all'],
             # Path model file.
             pathGenericModel4Scaling = os.path.join(
                 openSimPipelineDir, 'Models', 
-                sessionMetadata['openSimModel'] + '.osim')            
+                sessionMetadata['openSimModel'] + '.osim')
+            logging.info('Scaling generic OpenSim model: %s',
+                         pathGenericModel4Scaling)
             # Path TRC file.
             pathTRCFile4Scaling = pathAugmentedOutputFiles[trialName]
             # Get time range.
@@ -579,6 +581,8 @@ def main(sessionName, trialName, trial_id, cameras_to_use=['all'],
             pathScaledModel = os.path.join(outputScaledModelDir, 
                                             sessionMetadata['openSimModel'] + 
                                             "_scaled.osim")
+            logging.info('Looking for scaled OpenSim model: %s',
+                         pathScaledModel)
             if os.path.exists(pathScaledModel):
                 # Path setup file.
                 genericSetupFile4IKName = 'Setup_IK{}.xml'.format(suffix_model)
