@@ -42,15 +42,15 @@ The available options for metadata are:
 """
 import os
 import sys
-sys.path.append(os.path.abspath('./..'))
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from utils import changeSessionMetadata
 
-session_ids = ["0d46adef-62cb-455f-9ff3-8116717cc2fe"]
+session_ids = ["23d52d41-69fe-47cf-8b60-838e4268dd50"]
 
 # Dictionary of metadata fields to change (see sessionMetadata.yaml).
 newMetadata = {
-    'openSimModel':'LaiUhlrich2022_shoulder',
+    'openSimModel':'LaiUhlrich2022_shoulder_scaled_snapped_adjusted',
     'posemodel':'hrnet',
     'augmentermodel':'v0.3',
     'filterfrequency':15,
