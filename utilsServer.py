@@ -103,7 +103,10 @@ def processTrial(session_id, trial_id, trial_type = 'dynamic',
         deleteStaticFiles(session_path, staticTrialName = 'neutral')
         
         # Check for calibration to use on django, if not, check for switch calibrations and post result.
-        calibrationOptions = getCalibration(session_id,session_path,trial_type=trial_type,getCalibrationOptions=True)
+        calibrationOptions = getCalibration(
+            session_id, session_path, trial_type=trial_type,
+            getCalibrationOptions=True,
+            hasWritePermissions=hasWritePermissions)
         
         # download the videos
         trial_name = downloadVideosFromServer(session_id,trial_id,isDocker=isDocker,

@@ -549,7 +549,8 @@ def postCalibration(session_id,session_path,calibTrialID=None):
     
     return
 
-def getCalibration(session_id,session_path,trial_type='dynamic',getCalibrationOptions=False):
+def getCalibration(session_id, session_path, trial_type='dynamic',
+                   getCalibrationOptions=False, hasWritePermissions=True):
     # look for calibration pickles on Django. If they are not there, then see if 
     # we need to do any switch calibration, then post the good calibration to django.
     calibration_id = getCalibrationTrialID(session_id)
@@ -572,7 +573,7 @@ def getCalibration(session_id,session_path,trial_type='dynamic',getCalibrationOp
     
     # Post calibration if neutral trial. The posted parameters are no longer
     # used, but it is handy to know which ones were selected from both options.
-    if trial_type == 'static':
+    if trial_type == 'static' and hasWritePermissions:
         postCalibration(session_id,session_path,calibTrialID=calibration_id)   
 
     if getCalibrationOptions:
