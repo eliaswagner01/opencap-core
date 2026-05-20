@@ -7,6 +7,7 @@ import logging
 import time
 import random
 import urllib
+import yaml
 
 from main import main
 from utils import getDataDirectory
@@ -45,6 +46,32 @@ def patch_to_server_if_allowed(url, data, hasWritePermissions):
     else:
         logging.info('Skipping server update because you do not have permission to write to the server.')
         return None
+
+
+def applyLocalMetadataOverrides(session_path):
+    metadata_path = os.path.join(session_path, 'sessionMetadata.yaml')
+    override_path = os.path.join(session_path, 'sessionMetadata_local.yaml')
+    if not os.path.exists(metadata_path) or not os.path.exists(override_path):
+        return
+
+    session_metadata = importMetadata(metadata_path)
+    local_overrides = importMetadata(override_path)
+
+    for key, value in local_overrides.items():
+        applied = False
+        if key in session_metadata:
+            session_metadata[key] = value
+            applied = True
+        for metadata_value in session_metadata.values():
+            if isinstance(metadata_value, dict) and key in metadata_value:
+                metadata_value[key] = value
+                applied = True
+        if not applied:
+            session_metadata[key] = value
+
+    with open(metadata_path, 'w') as file:
+        yaml.dump(session_metadata, file)
+    logging.info('Applied local metadata overrides from %s', override_path)
 
 def processTrial(session_id, trial_id, trial_type = 'dynamic',
                  imageUpsampleFactor = 4, poseDetector = 'OpenPose',
@@ -111,10 +138,18 @@ def processTrial(session_id, trial_id, trial_type = 'dynamic',
         # download the videos
         trial_name = downloadVideosFromServer(session_id,trial_id,isDocker=isDocker,
                                  isCalibration=False,isStaticPose=True)
+        applyLocalMetadataOverrides(session_path)
         
         # Download the pose pickles to avoid re-running pose estimation.
         if batchProcess and use_existing_pose_pickle:
-            checkAndGetPosePickles(trial_id, session_path, poseDetector, resolutionPoseDetection, bbox_thr)
+            try:
+                checkAndGetPosePickles(
+                    trial_id, session_path, poseDetector,
+                    resolutionPoseDetection, bbox_thr)
+            except Exception as e:
+                logging.info(
+                    'Could not download existing pose pickles; re-running pose '
+                    'estimation instead. Error: %s', e)
 
         # If processTrial is run from app.py, poseDetector is set based on what
         # users select in the webapp, which is saved in metadata. Based on this,
@@ -203,10 +238,18 @@ def processTrial(session_id, trial_id, trial_type = 'dynamic',
         trial_name = downloadVideosFromServer(
             session_id, trial_id, isDocker=isDocker, isCalibration=False,
             isStaticPose=False)
+        applyLocalMetadataOverrides(session_path)
         
         # Download the pose pickles to avoid re-running pose estimation.
         if batchProcess and use_existing_pose_pickle:
-            checkAndGetPosePickles(trial_id, session_path, poseDetector, resolutionPoseDetection, bbox_thr)
+            try:
+                checkAndGetPosePickles(
+                    trial_id, session_path, poseDetector,
+                    resolutionPoseDetection, bbox_thr)
+            except Exception as e:
+                logging.info(
+                    'Could not download existing pose pickles; re-running pose '
+                    'estimation instead. Error: %s', e)
 
         # If processTrial is run from app.py, poseDetector is set based on what
         # users select in the webapp, which is saved in metadata. Based on this,
