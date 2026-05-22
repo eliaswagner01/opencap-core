@@ -51,6 +51,8 @@ def runScaleTool(pathGenericSetupFile, pathGenericModel, subjectMass,
                 markerSetFileName = 'LaiUhlrich2022_markers_augmenter_fixed.xml'
             elif 'adjusted' in scaledModelName and suffix_model == '_shoulder':
                 markerSetFileName = 'LaiUhlrich2022_markers_augmenter_shoulder_adjusted.xml'
+            elif 'adjusted' in scaledModelName:
+                markerSetFileName = 'LaiUhlrich2022_markers_augmenter_adjusted.xml'
             else:
                 markerSetFileName = 'LaiUhlrich2022_markers_augmenter{}.xml'.format(suffix_model)
     elif 'gait2392' in scaledModelName:

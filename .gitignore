@@ -9,6 +9,9 @@ __pycache__
 *_rotated.avi
 .env
 *.pth
+*.xlsx
+*.csv
+*.xml
 
 # Data
 */Data/*
@@ -34,3 +37,5 @@ newsletter.py
 *_no_patella.osim
 *_OpenPose.osim
 *_generic.osim
+*_adjusted.osim
+*_adjusted_no_patella.osim
