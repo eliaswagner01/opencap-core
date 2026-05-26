@@ -127,7 +127,7 @@ session_ids = ["23d52d41-69fe-47cf-8b60-838e4268dd50"]
 
 # Dictionary of metadata fields to change (see sessionMetadata.yaml).
 newMetadata = {
-    'openSimModel':'LaiUhlrich2022_shoulder_adjusted',
+    'openSimModel':'LaiUhlrich2022_adjusted',
     'posemodel':'hrnet',
     'augmentermodel':'v0.3',
     'filterfrequency':15,
