@@ -123,7 +123,7 @@ def hasWritePermissions(session_id):
     permissions = response.json()
     return permissions['isAdmin'] or permissions['isOwner']
 
-session_ids = ["23d52d41-69fe-47cf-8b60-838e4268dd50"]
+session_ids = ["4d5c3eb1-1a59-4ea1-9178-d3634610561c"]
 
 # Dictionary of metadata fields to change (see sessionMetadata.yaml).
 newMetadata = {

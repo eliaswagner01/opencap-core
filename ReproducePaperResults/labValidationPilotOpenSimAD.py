@@ -19,6 +19,8 @@ import shutil
 import sys
 from pathlib import Path
 
+import numpy as np
+
 REPO_DIR = Path(__file__).resolve().parents[1]
 WORKSPACE_DIR = REPO_DIR.parent
 PROCESSING_DIR = WORKSPACE_DIR / "opencap-processing"
@@ -32,7 +34,7 @@ for path in (PROCESSING_DIR, OPENSIM_AD_DIR):
 
 CASES = {
     "generic": "LaiUhlrich2022",
-    "modified": "LaiUhlrich2022_subjectSpecificFemur",
+    "modified": "LaiUhlrich2022_adjusted",
 }
 SUBJECT = "subject10"
 STAGED_SESSIONS = {
@@ -113,6 +115,15 @@ def parse_args() -> argparse.Namespace:
         action="store_true",
         help="Force OpenSimAD to regenerate adjusted/contact models and functions.",
     )
+    parser.add_argument(
+        "--polynomial-sample-count",
+        type=int,
+        default=0,
+        help=(
+            "Use an evenly subsampled polynomial-fitting dummy motion with this "
+            "many rows. Leave at 0 to use OpenSimAD's default DummyMotion.mot."
+        ),
+    )
     return parser.parse_args()
 
 
@@ -141,6 +152,21 @@ def copy_tree(source: Path, target: Path, overwrite: bool) -> None:
     shutil.copytree(source, target, dirs_exist_ok=True)
 
 
+def find_kinematics_mot(kinematics_dir: Path, trial_name: str) -> Path:
+    candidates = [
+        kinematics_dir / f"{trial_name}_LSTM.mot",
+        kinematics_dir / f"{trial_name}.mot",
+    ]
+    for candidate in candidates:
+        if candidate.exists():
+            return candidate
+    candidate_list = "\n  ".join(str(candidate) for candidate in candidates)
+    raise FileNotFoundError(
+        "Missing required kinematics file. Expected one of:\n"
+        f"  {candidate_list}"
+    )
+
+
 def staged_session_dir(args: argparse.Namespace, case_name: str) -> Path:
     return args.processing_data / STAGED_SESSIONS[case_name]
 
@@ -152,19 +178,28 @@ def source_case_session(args: argparse.Namespace, case_name: str,
 
 def write_staged_metadata(source_metadata: Path, target_metadata: Path,
                           case_name: str, overwrite: bool) -> None:
-    import yaml
-
     if target_metadata.exists() and not overwrite:
         return
     if not source_metadata.exists():
         raise FileNotFoundError(f"Missing metadata: {source_metadata}")
-    with open(source_metadata, "r") as f:
-        metadata = yaml.safe_load(f)
-    metadata["openSimModel"] = CASES[case_name]
-    metadata["subjectID"] = STAGED_SESSIONS[case_name]
+
+    replacements = {
+        "openSimModel": CASES[case_name],
+        "subjectID": STAGED_SESSIONS[case_name],
+    }
+    found = set()
+    lines = source_metadata.read_text().splitlines()
+    for idx, line in enumerate(lines):
+        key = line.split(":", 1)[0].strip()
+        if key in replacements and not line.startswith(" "):
+            lines[idx] = f"{key}: {replacements[key]}"
+            found.add(key)
+    for key, value in replacements.items():
+        if key not in found:
+            lines.append(f"{key}: {value}")
+
     target_metadata.parent.mkdir(parents=True, exist_ok=True)
-    with open(target_metadata, "w") as f:
-        yaml.dump(metadata, f)
+    target_metadata.write_text("\n".join(lines) + "\n")
 
 
 def stage_case(args: argparse.Namespace, case_name: str,
@@ -201,10 +236,12 @@ def stage_case(args: argparse.Namespace, case_name: str,
         source_session = source_case_session(
             args, case_name, trial_info["source_session"]
         )
-        source_ik = (
+        source_ik = find_kinematics_mot(
             source_session / "OpenSimData" / POSE_FOLDER / CAMERA_SETUP /
-            "Kinematics" / f"{trial_name}.mot"
+            "Kinematics",
+            trial_name,
         )
+        print(f"  {trial_name}: staging kinematics from {source_ik.name}")
         copy_file(
             source_ik,
             stage_dir / "OpenSimData" / "Kinematics" / f"{trial_name}.mot",
@@ -242,6 +279,52 @@ def walking_time_window(stage_dir: Path, trial_name: str) -> list[float]:
     force_path = stage_dir / "ForceData" / f"{trial_name}.mot"
     _, times = segmentWalkStance(str(force_path))
     return [float(times[0]), float(times[1])]
+
+
+def make_subsampled_polynomial_motion(stage_dir: Path,
+                                      sample_count: int) -> Path:
+    source = (
+        PROCESSING_DIR / "OpenSimPipeline" / "MuscleAnalysis" /
+        "DummyMotion.mot"
+    )
+    if sample_count <= 0:
+        raise ValueError("sample_count must be positive.")
+    if not source.exists():
+        raise FileNotFoundError(f"Missing default DummyMotion.mot: {source}")
+
+    lines = source.read_text().splitlines()
+    endheader_idx = next(
+        (idx for idx, line in enumerate(lines)
+         if line.strip().lower() == "endheader"),
+        None,
+    )
+    if endheader_idx is None or endheader_idx + 1 >= len(lines):
+        raise ValueError(f"Could not parse OpenSim motion header: {source}")
+
+    header = lines[:endheader_idx + 2]
+    rows = [line for line in lines[endheader_idx + 2:] if line.strip()]
+    if sample_count > len(rows):
+        raise ValueError(
+            f"Requested {sample_count} polynomial samples, but {source} only "
+            f"contains {len(rows)} rows."
+        )
+
+    if sample_count == len(rows):
+        selected_rows = rows
+    else:
+        indices = np.linspace(0, len(rows) - 1, sample_count, dtype=int)
+        selected_rows = [rows[idx] for idx in indices]
+
+    for idx, line in enumerate(header):
+        if line.strip().startswith("nRows="):
+            header[idx] = f"nRows={len(selected_rows)}"
+
+    target = (
+        stage_dir / "OpenSimData" / "Model" /
+        f"DummyMotion_polynomial_{sample_count}.mot"
+    )
+    target.write_text("\n".join(header + selected_rows) + "\n")
+    return target
 
 
 def run_case_trial(args: argparse.Namespace, case_name: str,
@@ -282,6 +365,14 @@ def run_case_trial(args: argparse.Namespace, case_name: str,
         "all",
         overwrite=args.overwrite_opensimad_inputs,
     )
+    if args.polynomial_sample_count:
+        path_dummy_motion = make_subsampled_polynomial_motion(
+            stage_dir, args.polynomial_sample_count)
+        settings["pathDummyMotion"] = str(path_dummy_motion)
+        print(
+            "Using subsampled polynomial-fitting motion: "
+            f"{path_dummy_motion}"
+        )
     run_tracking(
         str(PROCESSING_DIR),
         str(args.processing_data),

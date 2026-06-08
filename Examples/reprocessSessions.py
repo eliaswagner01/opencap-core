@@ -55,7 +55,7 @@ API_TOKEN = getToken()
 # Enter the identifier(s) of the session(s) you want to reprocess. This is a list of one
 # or more session identifiers. The identifier is found as the 36-character string at the
 # end of the session url: app.opencap.ai/session/<session_id>
-session_ids = ['23d52d41-69fe-47cf-8b60-838e4268dd50']
+session_ids = ['4d5c3eb1-1a59-4ea1-9178-d3634610561c']
 
 # Select which trials to reprocess. You can reprocess all trials in the session 
 # by entering None in all fields below. The correct calibration and static
@@ -67,8 +67,8 @@ session_ids = ['23d52d41-69fe-47cf-8b60-838e4268dd50']
 # static_id. A list of strings is allowed for dynamic_trialNames.
 
 calib_id = [] # None (auto-selected trial), [] (skip), or string of specific trial_id
-static_id = None # None (auto-selected trial), [] (skip), or string of specific trial_id
-dynamic_trialNames = None # None (all dynamic trials), [] (skip), or list of trial names
+static_id = [] # None (auto-selected trial), [] (skip), or string of specific trial_id
+dynamic_trialNames = ['DJ'] # None (all dynamic trials), [] (skip), or list of trial names
 
 # Select which pose estimation model to use; options are 'OpenPose' and 'hrnet'.
 # If the same pose estimation model was used when collecting data with the web
