@@ -123,16 +123,11 @@ def hasWritePermissions(session_id):
     permissions = response.json()
     return permissions['isAdmin'] or permissions['isOwner']
 
-session_ids = ["4d5c3eb1-1a59-4ea1-9178-d3634610561c"]
+session_ids = ["3375ffbc-daeb-4a43-b4f7-ac9899cd4c71"]
 
 # Dictionary of metadata fields to change (see sessionMetadata.yaml).
 newMetadata = {
     'openSimModel':'LaiUhlrich2022_adjusted',
-    'posemodel':'hrnet',
-    'augmentermodel':'v0.3',
-    'filterfrequency':15,
-    'datasharing':'Share processed data and identified videos',
-    'scalingsetup': 'upright_standing_pose'
 }
 
 for session_id in session_ids:
