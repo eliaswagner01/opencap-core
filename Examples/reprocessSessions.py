@@ -108,7 +108,7 @@ deleteLocalFolder = False
 # Set use_existing_pose_pickle to False to force pose detection to run locally.
 # This is required when you want OpenPose/mmpose to render videos with the
 # detected pose overlaid on the original videos.
-use_existing_pose_pickle = False
+use_existing_pose_pickle = True
       
 
 # %% Process data.

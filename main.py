@@ -439,6 +439,9 @@ def main(sessionName, trialName, trial_id, cameras_to_use=['all'],
             elif len(e.args) == 1: # generic exception
                 exception = "Triangulation failed. Verify your setup and try again. Visit https://www.opencap.ai/best-pratices to learn more about data collection and https://www.opencap.ai/troubleshooting for potential causes for a failed trial."
                 raise Exception(exception, traceback.format_exc())
+            else:
+                exception = "Triangulation failed. Verify your setup and try again. Visit https://www.opencap.ai/best-pratices to learn more about data collection and https://www.opencap.ai/troubleshooting for potential causes for a failed trial."
+                raise Exception(exception, traceback.format_exc())
         
         # Throw an error if not enough data
         if keypoints3D.shape[2] < 10:
