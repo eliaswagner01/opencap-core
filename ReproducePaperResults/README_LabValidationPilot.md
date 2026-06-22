@@ -1,17 +1,21 @@
 # LabValidation Pilot Model Comparison
 
 This pilot workflow compares the generic OpenCap model with a modified femur
-model on LabValidation `subject10`, `walking1`, and `squats1`.
+model on the available LabValidation subjects, walking, and `squats1`.
 
 Current OpenCap requires all cameras for extrinsics and neutral/static scaling.
 The pilot therefore uses all cameras for `extrinsics` and `static1`, then uses
-the selected `Cam1`/`Cam3` two-camera setup for `walking1` and `squats1`.
+the selected `Cam1`/`Cam3` two-camera setup for walking and `squats1`.
+`walking1` is used when available; subjects without `walking1` use the first
+available non-treadmill walking trial, for example `subject11` uses `walking2`.
+Subjects without local videos, such as `subject6` in the current dataset copy,
+are skipped.
 
 The modified model is expected at both:
 
 ```text
-opencap-core/OpenSimPipeline/Models/LaiUhlrich2022_subjectSpecificFemur.osim
-opencap-processing/OpenSimPipeline/Models/LaiUhlrich2022_subjectSpecificFemur.osim
+opencap-core/OpenSimPipeline/Models/LaiUhlrich2022_adjusted.osim
+opencap-processing/OpenSimPipeline/Models/LaiUhlrich2022_adjusted.osim
 ```
 
 You can install the core copy while running the kinematics script:
@@ -52,8 +56,8 @@ python opencap-core/ReproducePaperResults/labValidationPilotOpenSimAD.py --mode 
 This creates:
 
 ```text
-opencap-processing/Data/lab_subject10_generic
-opencap-processing/Data/lab_subject10_modified
+opencap-processing/Data/lab_<subject>_generic
+opencap-processing/Data/lab_<subject>_modified
 ```
 
 with kinematics, model, force, EMG, mocap IK, and mocap ID files in the folder
@@ -65,14 +69,17 @@ Run one trial first:
 
 ```powershell
 python opencap-core/ReproducePaperResults/labValidationPilotOpenSimAD.py `
-  --mode run --case generic --trial walking1
+  --mode run --case generic --subjects subject10 --trial walking
 ```
 
 Then run the rest:
 
 ```powershell
-python opencap-core/ReproducePaperResults/labValidationPilotOpenSimAD.py --mode run
+python opencap-core/ReproducePaperResults/labValidationPilotOpenSimAD.py `
+  --mode run --case both --trial both --polynomial-sample-count 1000
 ```
+
+Use `--subjects subject2 subject3` to run a subset.
 
 Use `--analyze-only` if the optimization has already been solved and you only
 want to regenerate analysis files.
