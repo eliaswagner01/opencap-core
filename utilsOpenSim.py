@@ -12,7 +12,7 @@ def runScaleTool(pathGenericSetupFile, pathGenericModel, subjectMass,
                  pathTRCFile, timeRange, pathOutputFolder, 
                  scaledModelName='not_specified', subjectHeight=0,
                  createModelWithContacts=False, fixed_markers=False,
-                 suffix_model=''):
+                 suffix_model='', allow_unrealistic_segment_sizes=False):
     
     logging.info(f"Scaling setup file: {pathGenericSetupFile}")
     logging.info(f"Scaling model file: {pathGenericModel}")
@@ -160,7 +160,10 @@ def runScaleTool(pathGenericSetupFile, pathGenericModel, subjectMass,
     # the camera calibration went wrong (i.e., bad extrinsics).
     if diff_scale > 1:
         exception = "Musculoskeletal model scaling failed; the segment sizes are not anthropometrically realistic. It is very likely that the camera calibration went wrong. Visit https://www.opencap.ai/best-pratices to learn more about camera calibration."
-        raise Exception(exception, exception)        
+        if allow_unrealistic_segment_sizes:
+            logging.warning(exception)
+        else:
+            raise Exception(exception, exception)        
     
     return pathOutputModel
     

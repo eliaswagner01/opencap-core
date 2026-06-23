@@ -67,8 +67,8 @@ session_ids = ['3375ffbc-daeb-4a43-b4f7-ac9899cd4c71']
 # static_id. A list of strings is allowed for dynamic_trialNames.
 
 calib_id = [] # None (auto-selected trial), [] (skip), or string of specific trial_id
-static_id = [] # None (auto-selected trial), [] (skip), or string of specific trial_id
-dynamic_trialNames = ['squat1', 'squat2', 'squat3', 'drop-jump1'] # None (all dynamic trials), [] (skip), or list of trial names
+static_id = None # None (auto-selected trial), [] (skip), or string of specific trial_id
+dynamic_trialNames = [] # None (all dynamic trials), [] (skip), or list of trial names
 
 # Select which pose estimation model to use; options are 'OpenPose' and 'hrnet'.
 # If the same pose estimation model was used when collecting data with the web
@@ -109,6 +109,12 @@ deleteLocalFolder = False
 # This is required when you want OpenPose/mmpose to render videos with the
 # detected pose overlaid on the original videos.
 use_existing_pose_pickle = True
+
+# Set this to True to continue when the scaled model fails the anthropometric
+# segment-size sanity check. Use only when you have inspected the model and the
+# scale-factor spread is expected, for example because custom geometry uses
+# different units than the rest of the model.
+allow_unrealistic_segment_sizes = True
       
 
 # %% Process data.
@@ -116,4 +122,5 @@ batchReprocess(session_ids,calib_id,static_id,dynamic_trialNames,
                poseDetector=poseDetector,
                resolutionPoseDetection=resolutionPoseDetection,
                deleteLocalFolder=deleteLocalFolder,
-               use_existing_pose_pickle=use_existing_pose_pickle)
+               use_existing_pose_pickle=use_existing_pose_pickle,
+               allow_unrealistic_segment_sizes=allow_unrealistic_segment_sizes)

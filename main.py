@@ -43,7 +43,8 @@ def main(sessionName, trialName, trial_id, cameras_to_use=['all'],
          dataDir=None, overwriteAugmenterModel=False,
          filter_frequency='default', overwriteFilterFrequency=False,
          scaling_setup='upright_standing_pose', overwriteScalingSetup=False,
-         overwriteCamerasToUse=False, syncVer=None,):
+         overwriteCamerasToUse=False, syncVer=None,
+         allow_unrealistic_segment_sizes=False):
 
     # %% High-level settings.
     # Camera calibration.
@@ -559,7 +560,8 @@ def main(sessionName, trialName, trial_id, cameras_to_use=['all'],
                     sessionMetadata['mass_kg'], pathTRCFile4Scaling, 
                     timeRange4Scaling, outputScaledModelDir,
                     subjectHeight=sessionMetadata['height_m'], 
-                    suffix_model=suffix_model)
+                    suffix_model=suffix_model,
+                    allow_unrealistic_segment_sizes=allow_unrealistic_segment_sizes)
             except Exception as e:
                 if len(e.args) == 2: # specific exception
                     raise Exception(e.args[0], e.args[1])
