@@ -1,14 +1,15 @@
 """
 Stage and run OpenSimAD for the LabValidation pilot comparison.
 
-Default pilot:
-    all staged LabValidation subjects, generic and modified cases, walking
-    and squats1 repetition 0.
+Default:
+    all staged LabValidation pilot subjects, generic and modified cases, and
+    all staged walking/squats trials.
 
 The script can stage files only, run OpenSimAD only, or do both:
 
     python labValidationPilotOpenSimAD.py --mode stage
-    python labValidationPilotOpenSimAD.py --mode run --case generic --trial walking
+    python labValidationPilotOpenSimAD.py --mode functions
+    python labValidationPilotOpenSimAD.py --mode run --subjects subject10 --case generic --trial walking1
     python labValidationPilotOpenSimAD.py --mode all
 """
 
@@ -19,7 +20,7 @@ import os
 import shutil
 import sys
 from pathlib import Path
-from typing import Tuple, Union
+from typing import Optional, Union
 
 import numpy as np
 
@@ -38,19 +39,6 @@ CASES = {
     "generic": "LaiUhlrich2022",
     "modified": "LaiUhlrich2022_adjusted",
 }
-PREFERRED_WALKING_TRIAL = "walking1"
-TRIAL_KINDS = {
-    "walking": {
-        "motion_type": "walking",
-        "source_session_index": 1,
-        "repetition": None,
-    },
-    "squats1": {
-        "motion_type": "squats",
-        "source_session_index": 0,
-        "repetition": 0,
-    },
-}
 POSE_FOLDER = "OpenPose_default"
 CAMERA_SETUP = "2-cameras"
 RUN_CASE_NAME = "pilot"
@@ -62,9 +50,12 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument(
         "--mode",
-        choices=["stage", "run", "all"],
+        choices=["stage", "functions", "run", "all"],
         default="stage",
-        help="Stage inputs, run OpenSimAD, or do both.",
+        help=(
+            "Stage inputs, generate OpenSimAD external functions, run "
+            "OpenSimAD, or do stage+run."
+        ),
     )
     parser.add_argument(
         "--case",
@@ -74,11 +65,11 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument(
         "--trial",
-        choices=["walking", "walking1", "squats1", "both"],
-        default="both",
+        nargs="+",
+        default=["all"],
         help=(
-            "Which trial to process. 'walking' uses walking1 when available "
-            "and falls back to the first available non-treadmill walking trial."
+            "Trial names to process, for example --trial walking1 squats1. "
+            "Use 'all' or 'both' to process every staged walking/squats trial."
         ),
     )
     parser.add_argument(
@@ -86,8 +77,8 @@ def parse_args() -> argparse.Namespace:
         nargs="+",
         default=["all"],
         help=(
-            "Subjects to process, for example: --subjects subject2 subject3. "
-            "Use 'all' to process every subject folder in --lab-data."
+            "Subjects to process, for example --subjects subject2 subject3. "
+            "Use 'all' to process every subject staged by kinematics."
         ),
     )
     parser.add_argument(
@@ -139,113 +130,122 @@ def selected_cases(case_arg: str) -> list[str]:
     return ["generic", "modified"] if case_arg == "both" else [case_arg]
 
 
-def selected_trials(trial_arg: str) -> list[str]:
-    if trial_arg == "both":
-        return ["walking", "squats1"]
-    if trial_arg == "walking1":
-        return ["walking"]
-    return [trial_arg]
-
-
-def subject_sort_key(subject: str) -> Tuple[str, Union[int, str]]:
+def subject_sort_key(subject: str) -> tuple[str, Union[int, str]]:
     prefix = "".join(ch for ch in subject if not ch.isdigit())
     suffix = "".join(ch for ch in subject if ch.isdigit())
     return (prefix, int(suffix) if suffix else subject)
 
 
-def selected_subjects(lab_data: Path, subject_args: list[str]) -> list[str]:
-    if len(subject_args) == 1 and subject_args[0].lower() == "all":
-        subjects = [
-            path.name for path in lab_data.iterdir()
-            if path.is_dir() and path.name.startswith("subject")
-        ]
+def session_sort_key(session_name: str) -> tuple[str, Union[int, str], int]:
+    subject, session = session_name.split("_Session", 1)
+    return (*subject_sort_key(subject), int(session))
+
+
+def selected_subjects(args: argparse.Namespace, cases: list[str]) -> list[str]:
+    if len(args.subjects) == 1 and args.subjects[0].lower() == "all":
+        subject_sets = []
+        for case_name in cases:
+            data_root = args.kinematics_root / case_name / "Data"
+            if not data_root.exists():
+                raise FileNotFoundError(
+                    f"Missing kinematics data root for {case_name}: {data_root}"
+                )
+            subjects = {
+                path.name.split("_Session", 1)[0]
+                for path in data_root.iterdir()
+                if path.is_dir() and "_Session" in path.name
+            }
+            subject_sets.append(subjects)
+        selected = sorted(set.intersection(*subject_sets), key=subject_sort_key)
     else:
-        subjects = subject_args
-    subjects = sorted(dict.fromkeys(subjects), key=subject_sort_key)
-    if not subjects:
-        raise FileNotFoundError(f"No subject folders found in {lab_data}")
-    for subject in subjects:
-        if not (lab_data / subject).exists():
-            raise FileNotFoundError(f"Missing subject folder: {lab_data / subject}")
-    return subjects
+        selected = sorted(dict.fromkeys(args.subjects), key=subject_sort_key)
+
+    if not selected:
+        raise FileNotFoundError("No subjects selected.")
+
+    for case_name in cases:
+        for subject in selected:
+            session0 = (
+                args.kinematics_root / case_name / "Data" /
+                f"{subject}_Session0"
+            )
+            if not session0.exists():
+                raise FileNotFoundError(
+                    f"Missing staged kinematics session: {session0}"
+                )
+    return selected
 
 
 def staged_session_name(subject: str, case_name: str) -> str:
     return f"lab_{subject}_{case_name}"
 
 
-def source_session_name(subject: str, session_index: int) -> str:
-    return f"{subject}_Session{session_index}"
-
-
-def is_walking_trial_name(trial_name: str) -> bool:
-    return trial_name.startswith("walking") and "TS" not in trial_name
-
-
-def strip_kinematics_suffix(path: Path) -> str:
-    name = path.stem
-    return name[:-5] if name.endswith("_LSTM") else name
-
-
-def walking_candidates_from_kinematics(kinematics_dir: Path) -> list[str]:
-    if not kinematics_dir.exists():
-        return []
-    candidates = {
-        strip_kinematics_suffix(path)
-        for path in kinematics_dir.glob("walking*.mot")
-        if is_walking_trial_name(strip_kinematics_suffix(path))
-    }
-    if PREFERRED_WALKING_TRIAL in candidates:
-        return [PREFERRED_WALKING_TRIAL] + sorted(
-            candidates - {PREFERRED_WALKING_TRIAL}, key=subject_sort_key)
-    return sorted(candidates, key=subject_sort_key)
-
-
-def lab_reference_files(lab_subject: Path, trial_name: str) -> list[Path]:
-    return [
-        lab_subject / "ForceData" / f"{trial_name}_forces.mot",
-        lab_subject / "EMGData" / f"{trial_name}_EMG.sto",
-        lab_subject / "OpenSimData" / "Mocap" / "IK" / f"{trial_name}.mot",
-        lab_subject / "OpenSimData" / "Mocap" / "ID" / f"{trial_name}.sto",
-    ]
-
-
-def choose_walking_trial(args: argparse.Namespace, case_name: str,
-                         subject: str) -> str:
-    session1 = source_case_session(args, case_name, subject, 1)
-    kinematics_dir = (
-        session1 / "OpenSimData" / POSE_FOLDER / CAMERA_SETUP / "Kinematics"
-    )
-    lab_subject = args.lab_data / subject
-    for trial_name in walking_candidates_from_kinematics(kinematics_dir):
-        if all(path.exists() for path in lab_reference_files(lab_subject, trial_name)):
-            if trial_name != PREFERRED_WALKING_TRIAL:
-                print(
-                    f"WARNING: {subject} has no staged {PREFERRED_WALKING_TRIAL}; "
-                    f"using {trial_name} instead."
-                )
-            return trial_name
-    raise FileNotFoundError(
-        f"No walking trial with kinematics and LabValidation references found "
-        f"for {case_name} {subject} in {kinematics_dir}"
+def trial_motion_type(trial_name: str) -> str:
+    lowered = trial_name.lower()
+    if lowered.startswith("walking"):
+        return "walking"
+    if lowered.startswith("squats"):
+        return "squats"
+    raise ValueError(
+        f"Unsupported OpenSimAD trial '{trial_name}'. This staging script "
+        "currently supports walking* and squats* trials."
     )
 
 
-def trial_spec(args: argparse.Namespace, case_name: str, subject: str,
-               trial_kind: str) -> dict[str, object]:
-    if trial_kind == "walking":
-        trial_name = choose_walking_trial(args, case_name, subject)
+def trial_repetition(trial_name: str) -> Optional[int]:
+    return 0 if trial_motion_type(trial_name) == "squats" else None
+
+
+def discover_trial_infos(args: argparse.Namespace, case_name: str,
+                         subject: str) -> dict[str, dict[str, object]]:
+    subject_sessions = sorted(
+        (
+            path for path in (args.kinematics_root / case_name / "Data").glob(
+                f"{subject}_Session*"
+            )
+            if path.is_dir()
+        ),
+        key=lambda path: session_sort_key(path.name),
+    )
+    trial_infos: dict[str, dict[str, object]] = {}
+    for session_dir in subject_sessions:
+        kinematics_dir = (
+            session_dir / "OpenSimData" / POSE_FOLDER / CAMERA_SETUP /
+            "Kinematics"
+        )
+        if not kinematics_dir.exists():
+            continue
+        for motion_file in sorted(kinematics_dir.glob("*_LSTM.mot")):
+            trial_name = motion_file.name.removesuffix("_LSTM.mot")
+            try:
+                motion_type = trial_motion_type(trial_name)
+            except ValueError:
+                continue
+            trial_infos[trial_name] = {
+                "motion_type": motion_type,
+                "source_session": session_dir.name,
+                "repetition": trial_repetition(trial_name),
+            }
+
+    requested = [trial for trial in args.trial]
+    if len(requested) == 1 and requested[0].lower() in ("all", "both"):
+        selected = trial_infos
     else:
-        trial_name = trial_kind
-    kind = "walking" if is_walking_trial_name(trial_name) else trial_kind
-    info = TRIAL_KINDS[kind]
-    return {
-        "trial_name": trial_name,
-        "motion_type": info["motion_type"],
-        "source_session": source_session_name(
-            subject, int(info["source_session_index"])),
-        "repetition": info["repetition"],
-    }
+        selected = {}
+        for trial_name in requested:
+            if trial_name not in trial_infos:
+                raise FileNotFoundError(
+                    f"No staged kinematics found for {case_name} {subject} "
+                    f"trial {trial_name}."
+                )
+            selected[trial_name] = trial_infos[trial_name]
+
+    if not selected:
+        raise FileNotFoundError(
+            f"No supported walking/squats kinematics found for "
+            f"{case_name} {subject}."
+        )
+    return dict(sorted(selected.items()))
 
 
 def copy_file(source: Path, target: Path, overwrite: bool) -> None:
@@ -286,15 +286,12 @@ def staged_session_dir(args: argparse.Namespace, subject: str,
 
 
 def source_case_session(args: argparse.Namespace, case_name: str,
-                        subject: str, session_index: int) -> Path:
-    return (
-        args.kinematics_root / case_name / "Data" /
-        source_session_name(subject, session_index)
-    )
+                        session_name: str) -> Path:
+    return args.kinematics_root / case_name / "Data" / session_name
 
 
 def write_staged_metadata(source_metadata: Path, target_metadata: Path,
-                          case_name: str, subject: str,
+                          subject: str, case_name: str,
                           overwrite: bool) -> None:
     if target_metadata.exists() and not overwrite:
         return
@@ -320,10 +317,10 @@ def write_staged_metadata(source_metadata: Path, target_metadata: Path,
     target_metadata.write_text("\n".join(lines) + "\n")
 
 
-def stage_case(args: argparse.Namespace, case_name: str, subject: str,
-               trial_kinds: list[str]) -> None:
+def stage_case(args: argparse.Namespace, subject: str, case_name: str,
+               trial_infos: dict[str, dict[str, object]]) -> None:
     stage_dir = staged_session_dir(args, subject, case_name)
-    session0 = source_case_session(args, case_name, subject, 0)
+    session0 = source_case_session(args, case_name, f"{subject}_Session0")
     source_model_dir = (
         session0 / "OpenSimData" / POSE_FOLDER / CAMERA_SETUP / "Model"
     )
@@ -340,8 +337,8 @@ def stage_case(args: argparse.Namespace, case_name: str, subject: str,
     write_staged_metadata(
         source_metadata,
         stage_dir / "sessionMetadata.yaml",
-        case_name,
         subject,
+        case_name,
         args.overwrite_stage,
     )
     copy_tree(
@@ -350,14 +347,9 @@ def stage_case(args: argparse.Namespace, case_name: str, subject: str,
         args.overwrite_stage,
     )
 
-    for trial_kind in trial_kinds:
-        spec = trial_spec(args, case_name, subject, trial_kind)
-        trial_name = str(spec["trial_name"])
+    for trial_name, trial_info in trial_infos.items():
         source_session = source_case_session(
-            args,
-            case_name,
-            subject,
-            1 if spec["motion_type"] == "walking" else 0,
+            args, case_name, str(trial_info["source_session"])
         )
         source_ik = find_kinematics_mot(
             source_session / "OpenSimData" / POSE_FOLDER / CAMERA_SETUP /
@@ -450,9 +442,8 @@ def make_subsampled_polynomial_motion(stage_dir: Path,
     return target
 
 
-def run_case_trial(args: argparse.Namespace, case_name: str, subject: str,
-                   trial_kind: str) -> None:
-    from UtilsDynamicSimulations.OpenSimAD.mainOpenSimAD import run_tracking
+def run_case_trial(args: argparse.Namespace, subject: str, case_name: str,
+                   trial_name: str, trial_info: dict[str, object]) -> None:
     from UtilsDynamicSimulations.OpenSimAD.utilsOpenSimAD import (
         processInputsOpenSimAD,
     )
@@ -463,25 +454,24 @@ def run_case_trial(args: argparse.Namespace, case_name: str, subject: str,
             f"Missing staged session {stage_dir}; run --mode stage first."
         )
 
-    spec = trial_spec(args, case_name, subject, trial_kind)
-    trial_name = str(spec["trial_name"])
-    motion_type = str(spec["motion_type"])
+    motion_type = str(trial_info["motion_type"])
     if motion_type == "walking":
         time_window = walking_time_window(stage_dir, trial_name)
         repetition = None
     else:
         time_window = []
-        repetition = spec["repetition"]
+        repetition = trial_info["repetition"]
 
     print(
-        f"Running OpenSimAD {case_name} {subject} {trial_name}: "
+        f"Running OpenSimAD {subject} {case_name} {trial_name}: "
         f"motion_type={motion_type}, "
         f"time_window={time_window}, repetition={repetition}"
     )
+    session_id = staged_session_name(subject, case_name)
     settings = processInputsOpenSimAD(
         str(PROCESSING_DIR),
         str(args.processing_data),
-        staged_session_name(subject, case_name),
+        session_id,
         trial_name,
         motion_type,
         time_window,
@@ -490,6 +480,15 @@ def run_case_trial(args: argparse.Namespace, case_name: str, subject: str,
         "all",
         overwrite=args.overwrite_opensimad_inputs,
     )
+    if args.mode == "functions":
+        print(
+            f"Generated OpenSimAD inputs/external function for "
+            f"{subject} {case_name} {trial_name}."
+        )
+        return
+
+    from UtilsDynamicSimulations.OpenSimAD.mainOpenSimAD import run_tracking
+
     if args.polynomial_sample_count:
         path_dummy_motion = make_subsampled_polynomial_motion(
             stage_dir, args.polynomial_sample_count)
@@ -501,7 +500,7 @@ def run_case_trial(args: argparse.Namespace, case_name: str, subject: str,
     run_tracking(
         str(PROCESSING_DIR),
         str(args.processing_data),
-        staged_session_name(subject, case_name),
+        session_id,
         settings,
         case=RUN_CASE_NAME,
         solveProblem=not args.analyze_only,
@@ -523,37 +522,29 @@ def validate_processing_model(case_name: str) -> None:
 def main_cli() -> None:
     args = parse_args()
     cases = selected_cases(args.case)
-    trials = selected_trials(args.trial)
-    subjects = selected_subjects(args.lab_data, args.subjects)
+    subjects = selected_subjects(args, cases)
+    trial_plan = {
+        (subject, case_name): discover_trial_infos(args, case_name, subject)
+        for subject in subjects
+        for case_name in cases
+    }
     for case_name in cases:
         validate_processing_model(case_name)
-    print(f"Subjects: {', '.join(subjects)}")
 
     if args.mode in ("stage", "all"):
-        for case_name in cases:
-            for subject in subjects:
-                try:
-                    stage_case(args, case_name, subject, trials)
-                except FileNotFoundError as exc:
-                    if args.subjects == ["all"]:
-                        print(f"WARNING: Skipping stage for {case_name} {subject}: {exc}")
-                        continue
-                    raise
+        for subject in subjects:
+            for case_name in cases:
+                stage_case(args, subject, case_name,
+                           trial_plan[(subject, case_name)])
 
-    if args.mode in ("run", "all"):
-        for case_name in cases:
-            for subject in subjects:
-                for trial_name in trials:
-                    try:
-                        run_case_trial(args, case_name, subject, trial_name)
-                    except FileNotFoundError as exc:
-                        if args.subjects == ["all"]:
-                            print(
-                                "WARNING: Skipping OpenSimAD for "
-                                f"{case_name} {subject} {trial_name}: {exc}"
-                            )
-                            continue
-                        raise
+    if args.mode in ("functions", "run", "all"):
+        for subject in subjects:
+            for case_name in cases:
+                for trial_name, trial_info in trial_plan[
+                    (subject, case_name)
+                ].items():
+                    run_case_trial(args, subject, case_name, trial_name,
+                                   trial_info)
 
 
 if __name__ == "__main__":
