@@ -396,6 +396,69 @@ def walking_time_window(stage_dir: Path, trial_name: str) -> list[float]:
     return [float(times[0]), float(times[1])]
 
 
+def storage_time_range(path: Path) -> Optional[tuple[float, float]]:
+    if not path.exists():
+        return None
+
+    lines = path.read_text().splitlines()
+    endheader_idx = next(
+        (idx for idx, line in enumerate(lines)
+         if line.strip().lower() == "endheader"),
+        None,
+    )
+    if endheader_idx is None or endheader_idx + 1 >= len(lines):
+        return None
+
+    headers = lines[endheader_idx + 1].split()
+    if "time" not in headers:
+        return None
+    time_idx = headers.index("time")
+
+    times = [
+        float(line.split()[time_idx])
+        for line in lines[endheader_idx + 2:]
+        if line.strip()
+    ]
+    if not times:
+        return None
+    return times[0], times[-1]
+
+
+def clamp_time_window_to_available_data(stage_dir: Path, trial_name: str,
+                                        time_window: list[float]) -> list[float]:
+    ranges = []
+    relative_paths = [
+        Path("OpenSimData") / "Kinematics" / f"{trial_name}.mot",
+        Path("ForceData") / f"{trial_name}.mot",
+        Path("EMGData") / f"{trial_name}.sto",
+        Path("OpenSimDataMocap") / "InverseKinematics" / f"{trial_name}.mot",
+        Path("OpenSimDataMocap") / "InverseDynamics" / f"{trial_name}.sto",
+    ]
+    for relative_path in relative_paths:
+        time_range = storage_time_range(stage_dir / relative_path)
+        if time_range is not None:
+            ranges.append(time_range)
+
+    if not ranges:
+        return time_window
+
+    clamped = [
+        max(float(time_window[0]), max(start for start, _ in ranges)),
+        min(float(time_window[1]), min(end for _, end in ranges)),
+    ]
+    if clamped[1] <= clamped[0]:
+        raise ValueError(
+            f"No overlapping data time range for {trial_name}: "
+            f"requested {time_window}, available ranges {ranges}."
+        )
+    if clamped != [float(time_window[0]), float(time_window[1])]:
+        print(
+            f"Clipped {trial_name} time window from {time_window} to "
+            f"{clamped} to match available staged data."
+        )
+    return clamped
+
+
 def make_subsampled_polynomial_motion(stage_dir: Path,
                                       sample_count: int) -> Path:
     source = (
@@ -457,6 +520,8 @@ def run_case_trial(args: argparse.Namespace, subject: str, case_name: str,
     motion_type = str(trial_info["motion_type"])
     if motion_type == "walking":
         time_window = walking_time_window(stage_dir, trial_name)
+        time_window = clamp_time_window_to_available_data(
+            stage_dir, trial_name, time_window)
         repetition = None
     else:
         time_window = []
@@ -480,6 +545,8 @@ def run_case_trial(args: argparse.Namespace, subject: str, case_name: str,
         "all",
         overwrite=args.overwrite_opensimad_inputs,
     )
+    settings["timeInterval"] = clamp_time_window_to_available_data(
+        stage_dir, trial_name, settings["timeInterval"])
     if args.mode == "functions":
         print(
             f"Generated OpenSimAD inputs/external function for "
