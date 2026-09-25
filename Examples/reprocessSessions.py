@@ -66,9 +66,9 @@ session_ids = ['3375ffbc-daeb-4a43-b4f7-ac9899cd4c71']
 # select specific trials. Only one trial (str) is allowed for calib_id and
 # static_id. A list of strings is allowed for dynamic_trialNames.
 
-calib_id = [] # None (auto-selected trial), [] (skip), or string of specific trial_id
+calib_id = None # None (auto-selected trial), [] (skip), or string of specific trial_id
 static_id = None # None (auto-selected trial), [] (skip), or string of specific trial_id
-dynamic_trialNames = [] # None (all dynamic trials), [] (skip), or list of trial names
+dynamic_trialNames = None # None (all dynamic trials), [] (skip), or list of trial names
 
 # Select which pose estimation model to use; options are 'OpenPose' and 'hrnet'.
 # If the same pose estimation model was used when collecting data with the web

@@ -287,7 +287,6 @@ def saveCameraParameters(filename,CameraParams):
 #%% 
 def getVideoRotation(videoPath):
     
-    
     meta = ffmpeg.probe(videoPath)
     try:
         rotation = meta['format']['tags']['com.apple.quicktime.video-orientation']
@@ -1739,9 +1738,13 @@ def popNeutralPoseImages(cameraDirectories, camerasToUse, tSingleImage,
     cameraDirectories_selectedCams = {}
     for iCam,cam in enumerate(cameras2Use):
         cameraDirectories_selectedCams[cam] = cameraDirectories[cam]                
-        videoPath = os.path.join(cameraDirectories_selectedCams[cam], 
-                                 'InputMedia', 'neutral', 
+        videoPath = os.path.join(cameraDirectories_selectedCams[cam],
+                                 'InputMedia', 'neutral',
                                  '{}_rotated.avi'.format(trial_id))
+        if not os.path.exists(videoPath):
+            videoPath = os.path.join(cameraDirectories_selectedCams[cam],
+                                     'InputMedia', trial_id,
+                                     '{}_rotated.avi'.format(trial_id))
         
         imagePath = video2Images(videoPath, tSingleImage=tSingleImage, 
                      filePrefix=(str(cam)+'_'), 

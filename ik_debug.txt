@@ -1,0 +1,335 @@
+[info] Set log level to Debug.
+[info] Preparing to run InverseKinematicsTool.
+[info] Loaded model LaiUhlrich2022_adjusted_scaled from file G:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\LaiUhlrich2022_adjusted_scaled_no_patella.osim
+[warning] Couldn't find file 'r_pelvis.vtp'.
+[debug] The following locations were tried:
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\r_pelvis.vtp
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\Geometry\r_pelvis.vtp
+[warning] Couldn't find file 'l_pelvis.vtp'.
+[debug] The following locations were tried:
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\l_pelvis.vtp
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\Geometry\l_pelvis.vtp
+[warning] Couldn't find file 'sacrum.vtp'.
+[debug] The following locations were tried:
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\sacrum.vtp
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\Geometry\sacrum.vtp
+[warning] Couldn't find file 'C:\Users\wagnerel85475\msk-STAPLE\opensim_models_JBiomech\automatic_VISIBLE_H_R_Geometries\femur_r.obj'.
+[debug] The following locations were tried:
+[debug] C:\Users\wagnerel85475\msk-STAPLE\opensim_models_JBiomech\automatic_VISIBLE_H_R_Geometries\femur_r.obj
+[warning] Couldn't find file 'r_tibia.vtp'.
+[debug] The following locations were tried:
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\r_tibia.vtp
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\Geometry\r_tibia.vtp
+[warning] Couldn't find file 'r_fibula.vtp'.
+[debug] The following locations were tried:
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\r_fibula.vtp
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\Geometry\r_fibula.vtp
+[warning] Couldn't find file 'r_talus.vtp'.
+[debug] The following locations were tried:
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\r_talus.vtp
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\Geometry\r_talus.vtp
+[warning] Couldn't find file 'r_foot.vtp'.
+[debug] The following locations were tried:
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\r_foot.vtp
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\Geometry\r_foot.vtp
+[warning] Couldn't find file 'r_bofoot.vtp'.
+[debug] The following locations were tried:
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\r_bofoot.vtp
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\Geometry\r_bofoot.vtp
+[warning] Couldn't find file 'C:\Users\wagnerel85475\msk-STAPLE\opensim_models_JBiomech\automatic_VISIBLE_H_L_Geometries\femur_l.obj'.
+[debug] The following locations were tried:
+[debug] C:\Users\wagnerel85475\msk-STAPLE\opensim_models_JBiomech\automatic_VISIBLE_H_L_Geometries\femur_l.obj
+[warning] Couldn't find file 'l_tibia.vtp'.
+[debug] The following locations were tried:
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\l_tibia.vtp
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\Geometry\l_tibia.vtp
+[warning] Couldn't find file 'l_fibula.vtp'.
+[debug] The following locations were tried:
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\l_fibula.vtp
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\Geometry\l_fibula.vtp
+[warning] Couldn't find file 'l_talus.vtp'.
+[debug] The following locations were tried:
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\l_talus.vtp
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\Geometry\l_talus.vtp
+[warning] Couldn't find file 'l_foot.vtp'.
+[debug] The following locations were tried:
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\l_foot.vtp
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\Geometry\l_foot.vtp
+[warning] Couldn't find file 'l_bofoot.vtp'.
+[debug] The following locations were tried:
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\l_bofoot.vtp
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\Geometry\l_bofoot.vtp
+[warning] Couldn't find file 'hat_spine.vtp'.
+[debug] The following locations were tried:
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\hat_spine.vtp
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\Geometry\hat_spine.vtp
+[warning] Couldn't find file 'hat_jaw.vtp'.
+[debug] The following locations were tried:
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\hat_jaw.vtp
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\Geometry\hat_jaw.vtp
+[warning] Couldn't find file 'hat_skull.vtp'.
+[debug] The following locations were tried:
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\hat_skull.vtp
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\Geometry\hat_skull.vtp
+[warning] Couldn't find file 'hat_ribs_scap.vtp'.
+[debug] The following locations were tried:
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\hat_ribs_scap.vtp
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\Geometry\hat_ribs_scap.vtp
+[warning] Couldn't find file 'humerus_rv.vtp'.
+[debug] The following locations were tried:
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\humerus_rv.vtp
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\Geometry\humerus_rv.vtp
+[warning] Couldn't find file 'ulna_rv.vtp'.
+[debug] The following locations were tried:
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\ulna_rv.vtp
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\Geometry\ulna_rv.vtp
+[warning] Couldn't find file 'radius_rv.vtp'.
+[debug] The following locations were tried:
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\radius_rv.vtp
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\Geometry\radius_rv.vtp
+[warning] Couldn't find file 'pisiform_rvs.vtp'.
+[debug] The following locations were tried:
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\pisiform_rvs.vtp
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\Geometry\pisiform_rvs.vtp
+[warning] Couldn't find file 'lunate_rvs.vtp'.
+[debug] The following locations were tried:
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\lunate_rvs.vtp
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\Geometry\lunate_rvs.vtp
+[warning] Couldn't find file 'scaphoid_rvs.vtp'.
+[debug] The following locations were tried:
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\scaphoid_rvs.vtp
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\Geometry\scaphoid_rvs.vtp
+[warning] Couldn't find file 'triquetrum_rvs.vtp'.
+[debug] The following locations were tried:
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\triquetrum_rvs.vtp
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\Geometry\triquetrum_rvs.vtp
+[warning] Couldn't find file 'hamate_rvs.vtp'.
+[debug] The following locations were tried:
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\hamate_rvs.vtp
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\Geometry\hamate_rvs.vtp
+[warning] Couldn't find file 'capitate_rvs.vtp'.
+[debug] The following locations were tried:
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\capitate_rvs.vtp
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\Geometry\capitate_rvs.vtp
+[warning] Couldn't find file 'trapezoid_rvs.vtp'.
+[debug] The following locations were tried:
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\trapezoid_rvs.vtp
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\Geometry\trapezoid_rvs.vtp
+[warning] Couldn't find file 'trapezium_rvs.vtp'.
+[debug] The following locations were tried:
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\trapezium_rvs.vtp
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\Geometry\trapezium_rvs.vtp
+[warning] Couldn't find file 'metacarpal2_rvs.vtp'.
+[debug] The following locations were tried:
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\metacarpal2_rvs.vtp
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\Geometry\metacarpal2_rvs.vtp
+[warning] Couldn't find file 'index_proximal_rvs.vtp'.
+[debug] The following locations were tried:
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\index_proximal_rvs.vtp
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\Geometry\index_proximal_rvs.vtp
+[warning] Couldn't find file 'index_medial_rvs.vtp'.
+[debug] The following locations were tried:
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\index_medial_rvs.vtp
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\Geometry\index_medial_rvs.vtp
+[warning] Couldn't find file 'index_distal_rvs.vtp'.
+[debug] The following locations were tried:
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\index_distal_rvs.vtp
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\Geometry\index_distal_rvs.vtp
+[warning] Couldn't find file 'metacarpal3_rvs.vtp'.
+[debug] The following locations were tried:
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\metacarpal3_rvs.vtp
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\Geometry\metacarpal3_rvs.vtp
+[warning] Couldn't find file 'middle_proximal_rvs.vtp'.
+[debug] The following locations were tried:
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\middle_proximal_rvs.vtp
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\Geometry\middle_proximal_rvs.vtp
+[warning] Couldn't find file 'middle_medial_rvs.vtp'.
+[debug] The following locations were tried:
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\middle_medial_rvs.vtp
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\Geometry\middle_medial_rvs.vtp
+[warning] Couldn't find file 'middle_distal_rvs.vtp'.
+[debug] The following locations were tried:
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\middle_distal_rvs.vtp
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\Geometry\middle_distal_rvs.vtp
+[warning] Couldn't find file 'metacarpal4_rvs.vtp'.
+[debug] The following locations were tried:
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\metacarpal4_rvs.vtp
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\Geometry\metacarpal4_rvs.vtp
+[warning] Couldn't find file 'ring_proximal_rvs.vtp'.
+[debug] The following locations were tried:
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\ring_proximal_rvs.vtp
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\Geometry\ring_proximal_rvs.vtp
+[warning] Couldn't find file 'ring_medial_rvs.vtp'.
+[debug] The following locations were tried:
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\ring_medial_rvs.vtp
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\Geometry\ring_medial_rvs.vtp
+[warning] Couldn't find file 'ring_distal_rvs.vtp'.
+[debug] The following locations were tried:
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\ring_distal_rvs.vtp
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\Geometry\ring_distal_rvs.vtp
+[warning] Couldn't find file 'metacarpal5_rvs.vtp'.
+[debug] The following locations were tried:
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\metacarpal5_rvs.vtp
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\Geometry\metacarpal5_rvs.vtp
+[warning] Couldn't find file 'little_proximal_rvs.vtp'.
+[debug] The following locations were tried:
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\little_proximal_rvs.vtp
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\Geometry\little_proximal_rvs.vtp
+[warning] Couldn't find file 'little_medial_rvs.vtp'.
+[debug] The following locations were tried:
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\little_medial_rvs.vtp
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\Geometry\little_medial_rvs.vtp
+[warning] Couldn't find file 'little_distal_rvs.vtp'.
+[debug] The following locations were tried:
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\little_distal_rvs.vtp
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\Geometry\little_distal_rvs.vtp
+[warning] Couldn't find file 'metacarpal1_rvs.vtp'.
+[debug] The following locations were tried:
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\metacarpal1_rvs.vtp
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\Geometry\metacarpal1_rvs.vtp
+[warning] Couldn't find file 'thumb_proximal_rvs.vtp'.
+[debug] The following locations were tried:
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\thumb_proximal_rvs.vtp
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\Geometry\thumb_proximal_rvs.vtp
+[warning] Couldn't find file 'thumb_distal_rvs.vtp'.
+[debug] The following locations were tried:
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\thumb_distal_rvs.vtp
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\Geometry\thumb_distal_rvs.vtp
+[warning] Couldn't find file 'humerus_lv.vtp'.
+[debug] The following locations were tried:
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\humerus_lv.vtp
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\Geometry\humerus_lv.vtp
+[warning] Couldn't find file 'ulna_lv.vtp'.
+[debug] The following locations were tried:
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\ulna_lv.vtp
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\Geometry\ulna_lv.vtp
+[warning] Couldn't find file 'radius_lv.vtp'.
+[debug] The following locations were tried:
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\radius_lv.vtp
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\Geometry\radius_lv.vtp
+[warning] Couldn't find file 'pisiform_lvs.vtp'.
+[debug] The following locations were tried:
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\pisiform_lvs.vtp
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\Geometry\pisiform_lvs.vtp
+[warning] Couldn't find file 'lunate_lvs.vtp'.
+[debug] The following locations were tried:
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\lunate_lvs.vtp
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\Geometry\lunate_lvs.vtp
+[warning] Couldn't find file 'scaphoid_lvs.vtp'.
+[debug] The following locations were tried:
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\scaphoid_lvs.vtp
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\Geometry\scaphoid_lvs.vtp
+[warning] Couldn't find file 'triquetrum_lvs.vtp'.
+[debug] The following locations were tried:
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\triquetrum_lvs.vtp
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\Geometry\triquetrum_lvs.vtp
+[warning] Couldn't find file 'hamate_lvs.vtp'.
+[debug] The following locations were tried:
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\hamate_lvs.vtp
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\Geometry\hamate_lvs.vtp
+[warning] Couldn't find file 'capitate_lvs.vtp'.
+[debug] The following locations were tried:
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\capitate_lvs.vtp
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\Geometry\capitate_lvs.vtp
+[warning] Couldn't find file 'trapezoid_lvs.vtp'.
+[debug] The following locations were tried:
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\trapezoid_lvs.vtp
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\Geometry\trapezoid_lvs.vtp
+[warning] Couldn't find file 'trapezium_lvs.vtp'.
+[debug] The following locations were tried:
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\trapezium_lvs.vtp
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\Geometry\trapezium_lvs.vtp
+[warning] Couldn't find file 'metacarpal2_lvs.vtp'.
+[debug] The following locations were tried:
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\metacarpal2_lvs.vtp
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\Geometry\metacarpal2_lvs.vtp
+[warning] Couldn't find file 'index_proximal_lvs.vtp'.
+[debug] The following locations were tried:
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\index_proximal_lvs.vtp
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\Geometry\index_proximal_lvs.vtp
+[warning] Couldn't find file 'index_medial_lvs.vtp'.
+[debug] The following locations were tried:
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\index_medial_lvs.vtp
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\Geometry\index_medial_lvs.vtp
+[warning] Couldn't find file 'index_distal_lvs.vtp'.
+[debug] The following locations were tried:
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\index_distal_lvs.vtp
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\Geometry\index_distal_lvs.vtp
+[warning] Couldn't find file 'metacarpal3_lvs.vtp'.
+[debug] The following locations were tried:
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\metacarpal3_lvs.vtp
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\Geometry\metacarpal3_lvs.vtp
+[warning] Couldn't find file 'middle_proximal_lvs.vtp'.
+[debug] The following locations were tried:
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\middle_proximal_lvs.vtp
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\Geometry\middle_proximal_lvs.vtp
+[warning] Couldn't find file 'middle_medial_lvs.vtp'.
+[debug] The following locations were tried:
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\middle_medial_lvs.vtp
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\Geometry\middle_medial_lvs.vtp
+[warning] Couldn't find file 'middle_distal_lvs.vtp'.
+[debug] The following locations were tried:
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\middle_distal_lvs.vtp
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\Geometry\middle_distal_lvs.vtp
+[warning] Couldn't find file 'metacarpal4_lvs.vtp'.
+[debug] The following locations were tried:
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\metacarpal4_lvs.vtp
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\Geometry\metacarpal4_lvs.vtp
+[warning] Couldn't find file 'ring_proximal_lvs.vtp'.
+[debug] The following locations were tried:
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\ring_proximal_lvs.vtp
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\Geometry\ring_proximal_lvs.vtp
+[warning] Couldn't find file 'ring_medial_lvs.vtp'.
+[debug] The following locations were tried:
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\ring_medial_lvs.vtp
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\Geometry\ring_medial_lvs.vtp
+[warning] Couldn't find file 'ring_distal_lvs.vtp'.
+[debug] The following locations were tried:
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\ring_distal_lvs.vtp
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\Geometry\ring_distal_lvs.vtp
+[warning] Couldn't find file 'metacarpal5_lvs.vtp'.
+[debug] The following locations were tried:
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\metacarpal5_lvs.vtp
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\Geometry\metacarpal5_lvs.vtp
+[warning] Couldn't find file 'little_proximal_lvs.vtp'.
+[debug] The following locations were tried:
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\little_proximal_lvs.vtp
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\Geometry\little_proximal_lvs.vtp
+[warning] Couldn't find file 'little_medial_lvs.vtp'.
+[debug] The following locations were tried:
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\little_medial_lvs.vtp
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\Geometry\little_medial_lvs.vtp
+[warning] Couldn't find file 'little_distal_lvs.vtp'.
+[debug] The following locations were tried:
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\little_distal_lvs.vtp
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\Geometry\little_distal_lvs.vtp
+[warning] Couldn't find file 'metacarpal1_lvs.vtp'.
+[debug] The following locations were tried:
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\metacarpal1_lvs.vtp
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\Geometry\metacarpal1_lvs.vtp
+[warning] Couldn't find file 'thumb_proximal_lvs.vtp'.
+[debug] The following locations were tried:
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\thumb_proximal_lvs.vtp
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\Geometry\thumb_proximal_lvs.vtp
+[warning] Couldn't find file 'thumb_distal_lvs.vtp'.
+[debug] The following locations were tried:
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\thumb_distal_lvs.vtp
+[debug] g:\wagnerel85475\opencap-core\Data\3375ffbc-daeb-4a43-b4f7-ac9899cd4c71\OpenSimData\Model\Geometry\thumb_distal_lvs.vtp
+
+               MODEL: LaiUhlrich2022_adjusted_scaled
+         coordinates: 33
+              forces: 0
+           actuators: 0
+             muscles: 0
+            analyses: 0
+              probes: 0
+              bodies: 20
+              joints: 20
+         constraints: 0
+             markers: 43
+         controllers: 0
+  contact geometries: 0
+misc modelcomponents: 0
+[info] Running tool a50dcbc9-3a55-4f2d-bbea-e8a9495916fc.
+[debug] UNASSEMBLED CONFIGURATION (normerr=0.0, maxerr=-1.79769e+308, cost=0.290922)
+[debug] Model numQs: 33 Assembler num freeQs: 33

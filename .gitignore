@@ -16,7 +16,6 @@ __pycache__
 # Data
 */Data/*
 Data/
-Data_backups/
 Examples/Data/*
 
 # Files for re-processing

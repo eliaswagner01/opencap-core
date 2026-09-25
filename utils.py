@@ -2,6 +2,7 @@ import yaml
 import json
 import os
 import socket
+import ssl
 import requests
 import urllib.request
 import shutil
@@ -13,6 +14,7 @@ import subprocess
 import zipfile
 import time
 import datetime
+import certifi
 
 import numpy as np
 import pandas as pd
@@ -26,6 +28,9 @@ API_URL = getAPIURL()
 API_TOKEN = getToken()
 
 #%% Rest of utils
+
+def get_certifi_ssl_context():
+    return ssl.create_default_context(cafile=certifi.where())
 
 def getDataDirectory(isDocker=False):
     computername = socket.gethostname()
@@ -100,7 +105,9 @@ def importMetadata(filePath):
     return parsedYamlFile
 
 def download_file(url, file_name):
-    with urllib.request.urlopen(url) as response, open(file_name, 'wb') as out_file:
+    with urllib.request.urlopen(
+            url, context=get_certifi_ssl_context()) as response, open(
+                file_name, 'wb') as out_file:
         shutil.copyfileobj(response, out_file)
         
 def getTrialJson(trial_id):
@@ -1030,7 +1037,8 @@ def getMainSettings(trial_id):
                 url = result['media']
                 # Load yaml file
                 try:
-                    with urllib.request.urlopen(url) as response:
+                    with urllib.request.urlopen(
+                            url, context=get_certifi_ssl_context()) as response:
                         yaml_content = response.read()
                         data = yaml.safe_load(yaml_content)
                         return data
